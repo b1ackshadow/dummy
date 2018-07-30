@@ -4,7 +4,8 @@ const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-
+const ejs = require("ejs");
+const fs = require("fs");
 const session = require("express-session");
 const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo")(session);
@@ -46,6 +47,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.user = req.user ? req.user : null;
+
   next();
 });
 //our routes

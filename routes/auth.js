@@ -3,8 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
 const userController = require("../controller/userController");
-const handleError = fn => (...params) =>
-  fn(...params).catch(error => console.log(error));
+const { handleError } = require("../helpers/helper");
 
 //auth routes
 router.get("/register", userController.getRegisterForm);
@@ -33,4 +32,13 @@ router.get("/profile", handleError(userController.profile));
 router.get("/logout", userController.logout);
 
 router.get("/forgot", userController.forgotForm);
+
+router.post("/forgot", userController.forgot);
+router.get("/account/reset/:token", handleError(userController.reset));
+router.post(
+  "/account/reset/:token",
+  userController.confirmedPasswords,
+  handleError(userController.update)
+);
+
 module.exports = router;
