@@ -15,16 +15,15 @@ router.post(
   function(req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
-    //   console.log(req.user);
-    res.redirect("/");
+    console.log("registered" + req.user);
+    res.json(req.user);
   }
 );
 router.get("/login", userController.loginForm);
 router.post("/login", passport.authenticate("local"), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
-  console.log(req.user);
-  res.redirect("/");
+  res.json(req.user);
 });
 
 router.get("/profile", handleError(userController.profile));

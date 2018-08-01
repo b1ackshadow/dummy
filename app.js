@@ -36,7 +36,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
-    cookie: { secure: true, maxAge: 5000 }
+    cookie: { secure: true, maxAge: 2000 }
   })
 );
 app.use(passport.initialize());
@@ -48,6 +48,10 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
   res.locals.user = req.user ? req.user : null;
   res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
 
   next();
 });
