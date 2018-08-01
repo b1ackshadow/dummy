@@ -6,7 +6,7 @@ const postController = require("../controller/postController");
 
 const { handleError, isLoggedIn, postOwnership } = require("../helpers/helper");
 
-router.get("/", isLoggedIn, handleError(postController.getAllPosts));
+router.get("/", handleError(postController.getAllPosts));
 
 router.get("/post/newPost", isLoggedIn, postController.postForm);
 router.post("/post", isLoggedIn, handleError(postController.newPost));

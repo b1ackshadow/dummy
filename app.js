@@ -47,6 +47,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.user = req.user ? req.user : null;
+  res.header("Access-Control-Allow-Origin", "*");
 
   next();
 });

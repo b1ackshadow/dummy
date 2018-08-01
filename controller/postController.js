@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 const Post = require("../models/Post");
 exports.getAllPosts = async (req, res) => {
-  const posts = await Post.find({}).populate("author");
-  res.render("landing", { posts });
+  const posts = await Post.find({})
+    .sort("-date")
+    .populate("author");
+  res.json(posts);
 };
 
 exports.postForm = (req, res) => {
@@ -15,7 +17,7 @@ exports.newPost = async (req, res) => {
     body: req.body.body,
     author: req.user._id
   });
-  post.save();
+  await post.save();
   if (post) {
     return res.redirect("/");
   }
