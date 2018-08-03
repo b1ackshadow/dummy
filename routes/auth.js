@@ -15,16 +15,29 @@ router.post(
   function(req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
-    console.log("registered" + req.user);
+    // console.log("registered" + req.user);
     res.json(req.user);
+    // res.redirect("/");
   }
 );
 router.get("/login", userController.loginForm);
 router.post("/login", passport.authenticate("local"), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
-  res.json(req.user);
+  const dummy = {
+    user: req.user,
+    s_id: req.cookies["connect.sid"]
+  };
+  console.log(dummy);
+  res.json(req.user); // res.redirect("/");
 });
+// router.post(
+//   "/login",
+//   passport.authenticate("local", {
+//     failureRedirect: "/login",
+//     successRedirect: "/"
+//   })
+// );
 
 router.get("/profile", handleError(userController.profile));
 

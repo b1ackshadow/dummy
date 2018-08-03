@@ -12,10 +12,12 @@ exports.getRegisterForm = (req, res) => {
 exports.register = async (req, res, next) => {
   const user = new User({ email: req.body.email, name: req.body.name });
   const register = promisify(User.register).bind(User);
-  try {
-    await register(user, req.body.password);
-    // pass to authController.login
+  console.log(user);
 
+  try {
+    let user1 = await register(user, req.body.password);
+    // pass to authController.login
+    console.log(user1);
     next();
   } catch (e) {
     console.log("error" + e);
@@ -30,6 +32,7 @@ exports.logout = (req, res) => {
   req.logout();
   //   req.flash("success", "You are now logged out! 👋");
   res.json(req.user);
+  // res.redirect("/login");
 };
 
 exports.profile = async (req, res) => {

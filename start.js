@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const dummy = require("./controller/postController");
 require("dotenv").config({ path: "variables.env" });
 
 mongoose.connect(
@@ -13,6 +13,7 @@ mongoose.Promise = global.Promise;
 mongoose.connection.on("error", err => {
   console.error(`🙅 🚫 🙅 🚫 🙅 🚫 🙅 🚫 → ${err.message}`);
 });
+// dummy.seedDB();
 // require("./models/Post");
 // require("./models/User");
 

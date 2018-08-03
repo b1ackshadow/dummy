@@ -11,6 +11,8 @@ const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo")(session);
 const User = require("./models/User");
 const postRoutes = require("./routes/post.js");
+const commentRoutes = require("./routes/comment.js");
+const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const cookieParser = require("cookie-parser");
 // const authRoutes = require("./routes/authroutes.js");
@@ -35,8 +37,10 @@ app.use(
     secret: "mynameajeff",
     resave: false,
     saveUninitialized: true,
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
-    cookie: { secure: true, maxAge: 2000 }
+    store: new MongoStore({
+      mongooseConnection: mongoose.connection,
+      ttl: 10 * 60
+    })
   })
 );
 app.use(passport.initialize());
@@ -45,17 +49,25 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+var corsOptions = {
+  origin: "http://localhost:3000",
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 app.use((req, res, next) => {
   res.locals.user = req.user ? req.user : null;
-  res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
-
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Credentials", true);
   next();
 });
 //our routes
 app.use("/", postRoutes);
+app.use("/", commentRoutes);
+
 app.use("/", authRoutes);
 module.exports = app;

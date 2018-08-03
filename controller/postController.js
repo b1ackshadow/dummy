@@ -1,10 +1,27 @@
 const mongoose = require("mongoose");
 const Post = require("../models/Post");
+const dummy = [
+  {
+    title: "tittle1",
+    body: "boandlsnadklad"
+  },
+  {
+    title: "tittle1",
+    body: "boandlsnadklad"
+  },
+  {
+    title: "tittle1",
+    body: "boandlsnadklad"
+  }
+];
+exports.seedDB = async () => {
+  await Post.insertMany(dummy);
+};
 exports.getAllPosts = async (req, res) => {
-  const posts = await Post.find({})
-    .sort("-date")
-    .populate("author");
+  const posts = await Post.find({}).sort("-date");
+
   res.json(posts);
+  // res.render("landing", { posts });
 };
 
 exports.postForm = (req, res) => {

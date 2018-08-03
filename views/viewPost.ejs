@@ -2,7 +2,6 @@
 
 
 <h1>Posts</h1>
-<% posts.forEach((post)=>{ %>
 <p id="<%=post._id %>">
     <h2><%= post.title %></h2>
     <h4><%=post.body %></h4>
@@ -13,8 +12,22 @@
     <% } %>
     <h3>Created By<i><%= post.author.name %> </i></h3>
     <hr />
-    <a href="/post/<%= post._id %>">View post</a>
+</p>
+<p>
+<a href="/post/<%=post._id %>/newComment">ADd a comment</a>
+</p>
+<p>
+    <% post.comments.forEach((comment)=>{ %>
+    <p>
+        <h2><%= comment.title %></h2>
+        <h3><%= comment.body %></h3>
+        <h4>Created by <i><%= comment.author.name %></i> </h4>
+        <a href="/post/<%= post._id %>/comment/<%=comment._id %>/edit">Edit</a>
+        <form action="/post/<%=post._id %>/<%=comment._id %>?_method=DELETE">Delete</form>
+    </p>
+    <hr>
+    <% }) %>
 </p>
 
-<% }) %>
+
 <% include ./partials/footer %>
