@@ -24,11 +24,6 @@ router.get("/login", userController.loginForm);
 router.post("/login", passport.authenticate("local"), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
-  const dummy = {
-    user: req.user,
-    s_id: req.cookies["connect.sid"]
-  };
-  console.log(dummy);
   res.json(req.user); // res.redirect("/");
 });
 // router.post(
