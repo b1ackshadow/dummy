@@ -14,13 +14,22 @@ router.get(
 );
 
 router.put(
-  "/post/:postid/:commentid",
+  "/post/:postid/comment/:commentid",
   handleError(commentController.updateComment)
 );
 
 router.delete(
   "/post/:postid/:commentid",
   handleError(commentController.deleteComment)
+);
+
+router.get(
+  "/post/:postid/comment/:commentid/newReply",
+  handleError(commentController.newReply)
+);
+router.post(
+  "/post/:postid/comment/:commentid",
+  handleError(commentController.addReply)
 );
 
 module.exports = router;

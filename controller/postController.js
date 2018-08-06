@@ -18,7 +18,13 @@ exports.seedDB = async () => {
   await Post.insertMany(dummy);
 };
 exports.getAllPosts = async (req, res) => {
-  const posts = await Post.find({}).sort("-date");
+  console.log("get post");
+
+  let skip_count = 3 * req.params.postCount;
+  const posts = await Post.find({})
+    .skip(skip_count)
+    .limit(3)
+    .sort("-date");
 
   res.json(posts);
   // res.render("landing", { posts });

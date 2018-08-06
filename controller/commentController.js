@@ -13,7 +13,7 @@ exports.newComment = async (req, res) => {
     author: req.user._id
   };
   const comment = await new Comment(dummy);
-  comment.save();
+  await comment.save();
   if (!comment) return res.redirect(`back`);
   res.redirect(`/post/${req.params.postid}`);
 };
@@ -21,7 +21,7 @@ exports.newComment = async (req, res) => {
 exports.editComment = async (req, res) => {
   const comment = await Comment.findOne({ _id: req.params.commentid });
   if (comment)
-    return res.render("commentForm", { comment, postid: req.params.postid });
+    return res.render("editForm", { comment, postid: req.params.postid });
   res.redirect("back");
 };
 
@@ -38,9 +38,37 @@ exports.updateComment = async (req, res) => {
 };
 
 exports.deleteComment = async (req, res) => {
-  const deleteComment = await Comment.findOneAndRemove({
+  const deletedComment = await Comment.findOneAndRemove({
     _id: req.params.commentid
   });
-  if (deletedComment) return res.redirect(`/post/${req.params.postid}`);
-  res.redirect("/");
+  console.log(deletedComment);
+  if (!deletedComment) return res.redirect("/");
+  res.redirect(`/post/${req.params.postid}`);
+};
+
+exports.newReply = async (req, res) => {
+  const comment = await Comment.findOne({ _id: req.params.commentid });
+  if (comment)
+    return res.render("replyForm", { comment, postid: req.params.postid });
+  res.redirect("back");
+};
+
+exports.addReply = async (req, res) => {
+  const comment = await Comment.findOneAndUpdate(
+    { _id: req.params.commentid },
+    { children: true },
+    {
+      new: true
+    }
+  );
+  if (comment) {
+    const reply = await new Comment({
+      ...req.body,
+      parent: req.params.commentid,
+      author: req.user._id
+    });
+    await reply.save();
+    return res.redirect(`/post/${req.params.postid}`);
+  }
+  res.redirect(`/post/${req.params.postid}`);
 };

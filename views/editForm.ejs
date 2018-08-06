@@ -1,0 +1,14 @@
+<% include ./partials/header %>
+<form action="/post/<%= postid %>/comment/<%= comment._id %>?_method=PUT" method="post">
+<input type="text" name="title" placeholder="Title" <% if(comment && comment.title) {%> value="<%= comment.title %>" <% } %>/>
+<textarea  name="body" rows=6>
+<% if(comment) { %>
+<%= comment.body %>
+
+
+<% } %>
+
+</textarea>
+<input type="submit" value="Add comment">
+</form>
+<% include ./partials/footer %>

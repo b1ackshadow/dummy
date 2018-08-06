@@ -32,7 +32,6 @@ exports.logout = (req, res) => {
   req.logout();
   //   req.flash("success", "You are now logged out! 👋");
   res.json(req.user);
-  // res.redirect("/login");
 };
 
 exports.profile = async (req, res) => {
