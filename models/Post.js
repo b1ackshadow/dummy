@@ -6,16 +6,19 @@ const postSchema = new mongoose.Schema(
     title: String,
     date: {
       type: Date,
-      default: new Date()
-    },
-    editing: {
-      type: Boolean,
-      default: false
+      default: Date.now
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
-    }
+    },
+    hearts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      }
+    ],
+    photo: String
   },
   {
     toJSON: { virtuals: true },

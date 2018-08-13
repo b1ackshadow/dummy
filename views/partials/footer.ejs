@@ -1,4 +1,32 @@
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="/chatScript.js"></script>
+<script type="text/javascript">
+    function searchResultsDisplay(user){
+        return `<p><a href="/profile/${user._id}">${user.name}</a></p>`;
+
+    }
+    $("#search").on("keypress",function(e) {
+        $("#search_results").empty();
+            $(".loader").css("display", "block");
+    const search_key = $("#search").val();
+        $.post(`/api/search`,{key_word:search_key}, function(data, status){
+            // console.log("Data: " + data + "\nStatus: " + status);
+            let results = data.map(user=> searchResultsDisplay(user));
+            $('#search_results').append(results)
+                    $(".loader").css("display", "none");
+
+
+        });
+    });
+
+</script>
+
 </body>
 </html>

@@ -1,0 +1,16 @@
+<% include ./partials/header %>
+
+<h2>My friends</h2>
+<p>
+  <%  friends.map(friend=>{ %>
+    <a href="/profile/<%= friend._id %>"><%= friend.name %></a>
+        <br>
+    <a href="/unfriend/<%= friend._id %>">Unfriend</a>
+    <br>
+    <br>
+
+
+   <% }) %>
+</p>
+
+<% include ./partials/footer %>

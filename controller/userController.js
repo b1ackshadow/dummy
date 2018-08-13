@@ -4,13 +4,51 @@ const { promisify } = require("es6-promisify");
 const passport = require("passport");
 const mail = require("../helpers/mail");
 const crypto = require("crypto");
+const multer = require("multer");
+const uuid = require("uuid");
+const jimp = require("jimp");
 
+//multer oprtions for like memory storage and file mimetype check
+const multerOptions = {
+  storage: multer.memoryStorage(),
+  fileFilter(req, file, next) {
+    console.log(file);
+    const isPhoto = file.mimetype.startsWith("image/");
+    if (isPhoto) {
+      next(null, true);
+    } else {
+      next({ message: "That filetype isn't allowed!" }, false);
+    }
+  }
+};
+
+exports.upload = multer(multerOptions).single("photo");
+
+exports.resize = async (req, res, next) => {
+  // check if there is no new file to resize
+  if (!req.file) {
+    return next(); // skip to the next middleware
+  }
+  const extension = req.file.mimetype.split("/")[1];
+  //created a random generated string as image name
+  req.body.photo = `${uuid.v4()}.${extension}`;
+  // now we resize
+  const photo = await jimp.read(req.file.buffer);
+  await photo.resize(400, jimp.AUTO);
+  await photo.write(`./public/uploads/${req.body.photo}`);
+  next();
+};
 exports.getRegisterForm = (req, res) => {
   res.render("register");
 };
 
 exports.register = async (req, res, next) => {
-  const user = new User({ email: req.body.email, name: req.body.name });
+  const user = new User({
+    email: req.body.email,
+    name: req.body.name,
+    photo: req.body.photo
+  });
+  // console.log(`REgistering data ${req.body}`);
   const register = promisify(User.register).bind(User);
   console.log(user);
 
@@ -36,9 +74,9 @@ exports.logout = (req, res) => {
 
 exports.profile = async (req, res) => {
   if (!req.user) return res.redirect("/login");
-  const user = await User.findById(req.user._id);
-  console.log(req.user);
-  res.json(req.user);
+  const user = await User.findById(req.params.userId);
+  // res.json(user);
+  res.render("profile", { user });
 };
 
 exports.forgotForm = (req, res) => {

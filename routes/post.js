@@ -5,11 +5,27 @@ const Post = require("../models/Post");
 const postController = require("../controller/postController");
 
 const { handleError, isLoggedIn, postOwnership } = require("../helpers/helper");
-
+router.get("/chat", postController.chat);
+router.get(
+  "/getNew/:LatestPostId",
+  isLoggedIn,
+  handleError(postController.getNewPosts)
+);
+router.get("/", isLoggedIn, handleError(postController.getAllPosts));
+//pagination or infinite scrolling postCOunt or pageCount
 router.get("/:postCount", isLoggedIn, handleError(postController.getAllPosts));
 
 router.get("/post/newPost", isLoggedIn, postController.postForm);
-router.post("/post", isLoggedIn, handleError(postController.newPost));
+var fileupload = require("fileupload").createFileUpload(
+  `${__dirname}/../public/uploads/`
+).middleware;
+
+router.post(
+  "/post",
+  isLoggedIn,
+  fileupload,
+  handleError(postController.newPost)
+);
 
 router.get(
   "/post/:id/edit",
@@ -25,6 +41,19 @@ router.delete(
   handleError(postController.deletePost)
 );
 
+//heart post
+
+router.get(
+  "/post/:id/heart",
+  postOwnership,
+  handleError(postController.heartPost)
+);
+router.get(
+  "/post/:id/unheart",
+  postOwnership,
+  handleError(postController.unHeartPost)
+);
+
 //view post
 router.get(
   "/post/:postid",
@@ -36,6 +65,5 @@ router.get(
     // res.json(post);
   })
 );
-//auth routes
-
+//chat routes
 module.exports = router;

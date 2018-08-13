@@ -10,7 +10,26 @@ const userSchema = new mongoose.Schema({
   },
   name: String,
   resetPasswordToken: String,
-  resetPasswordExpires: Date
+  resetPasswordExpires: Date,
+  photo: String,
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
+  requestTo: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
+  toBeAccepted: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ]
 });
 
 userSchema.plugin(passportLocalMongoose, { usernameField: "email" });

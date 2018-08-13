@@ -1,0 +1,17 @@
+<% include ./partials/header %>
+
+<h2>Frind requests</h2>
+<p>
+  <%  user.toBeAccepted.map(friend=>{ %>
+    <a href="/profile/<%= friend %>"><%= friend %></a>
+        <br>
+    <a href="/acceptRequest/<%= friend %>">Accept</a>
+
+    <a href="/declineRequest/<%= friend %>">Decline</a>
+    <br>
+
+
+   <% }) %>
+</p>
+
+<% include ./partials/footer %>

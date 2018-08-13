@@ -10,6 +10,8 @@ router.get("/register", userController.getRegisterForm);
 
 router.post(
   "/register",
+  userController.upload,
+  handleError(userController.resize),
   handleError(userController.register),
   passport.authenticate("local"),
   function(req, res) {
@@ -34,7 +36,7 @@ router.post("/login", passport.authenticate("local"), function(req, res) {
 //   })
 // );
 
-router.get("/profile", handleError(userController.profile));
+router.get("/profile/:userId", handleError(userController.profile));
 
 router.get("/logout", userController.logout);
 
