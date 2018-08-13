@@ -51,8 +51,8 @@ exports.getAllPosts = async (req, res) => {
     .sort("-date")
     .skip(skip_count)
     .limit(3);
-  // res.json(posts);
-  res.render("landing", { posts });
+  res.json(posts);
+  // res.render("landing", { posts });
 };
 
 exports.postForm = (req, res) => {
@@ -129,13 +129,11 @@ exports.getNewPosts = async (req, res) => {
 
 exports.heartPost = async (req, res) => {
   const heartedPost = await Post.findOne({ _id: req.params.id });
-  heartedPost.hearts.push(req.user._id);
+  let index = heartedPost.hearts.indexOf(req.user._id);
+  if (index == -1) {
+    heartedPost.hearts.push(req.user._id);
+  } else heartedPost.hearts.splice(index, 1);
   await heartedPost.save();
-  res.json(heartedPost);
-};
-exports.unHeartPost = async (req, res) => {
-  const heartedPost = await Post.findOne({ _id: req.params.id });
-  heartedPost.hearts.pop(req.user._id);
-  await heartedPost.save();
+  console.log(` hearted pis ${heartedPost}`);
   res.json(heartedPost);
 };
